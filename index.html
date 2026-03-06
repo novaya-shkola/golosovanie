@@ -1,0 +1,38 @@
+<script>
+    // 1. При загрузке страницы проверяем, голосовал ли юзер раньше
+    let hasVoted = localStorage.getItem('userHasVoted');
+    let votes = localStorage.getItem('candidateVotes') || 0;
+    
+    const voteDisplay = document.getElementById('vote-count');
+    const voteBtn = document.querySelector('.btn');
+    
+    voteDisplay.innerText = votes;
+
+    // Если уже голосовал, можно сразу визуально изменить кнопку
+    if (hasVoted) {
+        voteBtn.innerText = "Голос принят";
+        voteBtn.style.background = "#6c757d"; // Серый цвет
+    }
+
+    function addVote() {
+        // 2. Проверка: если в памяти есть отметка о голосовании
+        if (localStorage.getItem('userHasVoted')) {
+            alert("Вы уже оставили свой голос! Повторно голосовать нельзя.");
+            return; // Выходим из функции, ничего не прибавляем
+        }
+
+        // 3. Если не голосовал — прибавляем голос
+        votes++;
+        voteDisplay.innerText = votes;
+        
+        // 4. Сохраняем новое число голосов и ставим метку юзеру
+        localStorage.setItem('candidateVotes', votes);
+        localStorage.setItem('userHasVoted', 'true');
+
+        // Меняем кнопку, чтобы было понятно
+        voteBtn.innerText = "Голос принят";
+        voteBtn.style.background = "#6c757d";
+        
+        alert("Спасибо! Ваш голос учтен.");
+    }
+</script>
