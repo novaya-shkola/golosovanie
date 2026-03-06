@@ -1,38 +1,113 @@
-<script>
-    // 1. При загрузке страницы проверяем, голосовал ли юзер раньше
-    let hasVoted = localStorage.getItem('userHasVoted');
-    let votes = localStorage.getItem('candidateVotes') || 0;
-    
-    const voteDisplay = document.getElementById('vote-count');
-    const voteBtn = document.querySelector('.btn');
-    
-    voteDisplay.innerText = votes;
-
-    // Если уже голосовал, можно сразу визуально изменить кнопку
-    if (hasVoted) {
-        voteBtn.innerText = "Голос принят";
-        voteBtn.style.background = "#6c757d"; // Серый цвет
-    }
-
-    function addVote() {
-        // 2. Проверка: если в памяти есть отметка о голосовании
-        if (localStorage.getItem('userHasVoted')) {
-            alert("Вы уже оставили свой голос! Повторно голосовать нельзя.");
-            return; // Выходим из функции, ничего не прибавляем
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Голосование за кандидата</title>
+    <style>
+        /* Стили для внешнего вида */
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
         }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 300px;
+        }
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 4px solid #007bff;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 16px;
+            border-radius: 50px; /* Закругленный фрейм */
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            font-weight: bold;
+        }
+        .btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .counter {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        #vote-count {
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
 
-        // 3. Если не голосовал — прибавляем голос
-        votes++;
-        voteDisplay.innerText = votes;
+    <div class="container">
+        <img src="my-photo.jpg" alt="Мое фото" class="profile-pic">
         
-        // 4. Сохраняем новое число голосов и ставим метку юзеру
-        localStorage.setItem('candidateVotes', votes);
-        localStorage.setItem('userHasVoted', 'true');
+        <button id="vote-btn" class="btn">Оставить голос за кандидата</button>
+        
+        <div class="counter">
+            Подсчет голосов: <span id="vote-count">0</span>
+        </div>
+    </div>
 
-        // Меняем кнопку, чтобы было понятно
-        voteBtn.innerText = "Голос принят";
-        voteBtn.style.background = "#6c757d";
-        
-        alert("Спасибо! Ваш голос учтен.");
-    }
-</script>
+    <script>
+        // Ждем загрузки всей страницы, чтобы не было ошибки "null"
+        document.addEventListener('DOMContentLoaded', () => {
+            const voteBtn = document.getElementById('vote-btn');
+            const voteDisplay = document.getElementById('vote-count');
+
+            // 1. Загружаем данные из памяти браузера
+            let currentVotes = parseInt(localStorage.getItem('candidateVotes')) || 0;
+            let hasVoted = localStorage.getItem('userHasVoted');
+
+            // 2. Отображаем текущее число голосов
+            voteDisplay.innerText = currentVotes;
+
+            // 3. Если юзер уже голосовал, блокируем кнопку сразу
+            if (hasVoted) {
+                voteBtn.innerText = "Голос принят";
+                voteBtn.disabled = true;
+            }
+
+            // 4. Логика клика
+            voteBtn.addEventListener('click', () => {
+                if (!localStorage.getItem('userHasVoted')) {
+                    currentVotes++;
+                    voteDisplay.innerText = currentVotes;
+                    
+                    // Сохраняем в браузер
+                    localStorage.setItem('candidateVotes', currentVotes);
+                    localStorage.setItem('userHasVoted', 'true');
+
+                    // Визуально отключаем кнопку
+                    voteBtn.innerText = "Голос принят";
+                    voteBtn.disabled = true;
+
+                    alert("Ваш голос учтен!");
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
