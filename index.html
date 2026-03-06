@@ -5,109 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Голосование за кандидата</title>
     <style>
-        /* Стили для внешнего вида */
         body {
-            font-family: sans-serif;
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background-color: #f4f4f9;
+            color: #1c1e21;
         }
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+
+        .card {
+            background: #ffffff;
+            width: 90%;
+            max-width: 400px;
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             text-align: center;
-            width: 300px;
         }
+
         .profile-pic {
-            width: 150px;
-            height: 150px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
             object-fit: cover;
+            border: 6px solid #0088cc; /* Цвет Telegram */
             margin-bottom: 20px;
-            border: 4px solid #007bff;
         }
-        .btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 15px 20px;
+
+        h2 {
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+        p {
             font-size: 16px;
-            border-radius: 50px; /* Закругленный фрейм */
-            cursor: pointer;
-            transition: 0.3s;
-            width: 100%;
-            font-weight: bold;
+            line-height: 1.5;
+            color: #4b4f56;
+            margin-bottom: 25px;
         }
-        .btn:disabled {
-            background-color: #6c757d;
-            cursor: not-allowed;
-        }
-        .counter {
-            margin-top: 20px;
+
+        .btn-tg {
+            display: inline-block;
+            background-color: #0088cc;
+            color: white;
+            text-decoration: none;
+            padding: 16px 30px;
             font-size: 18px;
-            color: #333;
-        }
-        #vote-count {
             font-weight: bold;
-            color: #007bff;
+            border-radius: 50px; /* Закругленный фрейм */
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
+        }
+
+        .btn-tg:hover {
+            background-color: #0077b5;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.4);
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 13px;
+            color: #90949c;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <img src="my-photo.jpg" alt="Мое фото" class="profile-pic">
+    <div class="card">
+        <img src="my-photo.jpg" alt="Кандидат" class="profile-pic">
         
-        <button id="vote-btn" class="btn">Оставить голос за кандидата</button>
+        <h2>Выбор кандидата</h2>
+        <p>Хотите оставить голос за кандидата? <br> Переходите в нашего ТГ-Бота</p>
         
-        <div class="counter">
-            Подсчет голосов: <span id="vote-count">0</span>
+        <a href="https://t.me/your_bot_username" class="btn-tg">Перейти в бота</a>
+        
+        <div class="footer">
+            Организатор: Axioma API
         </div>
     </div>
-
-    <script>
-        // Ждем загрузки всей страницы, чтобы не было ошибки "null"
-        document.addEventListener('DOMContentLoaded', () => {
-            const voteBtn = document.getElementById('vote-btn');
-            const voteDisplay = document.getElementById('vote-count');
-
-            // 1. Загружаем данные из памяти браузера
-            let currentVotes = parseInt(localStorage.getItem('candidateVotes')) || 0;
-            let hasVoted = localStorage.getItem('userHasVoted');
-
-            // 2. Отображаем текущее число голосов
-            voteDisplay.innerText = currentVotes;
-
-            // 3. Если юзер уже голосовал, блокируем кнопку сразу
-            if (hasVoted) {
-                voteBtn.innerText = "Голос принят";
-                voteBtn.disabled = true;
-            }
-
-            // 4. Логика клика
-            voteBtn.addEventListener('click', () => {
-                if (!localStorage.getItem('userHasVoted')) {
-                    currentVotes++;
-                    voteDisplay.innerText = currentVotes;
-                    
-                    // Сохраняем в браузер
-                    localStorage.setItem('candidateVotes', currentVotes);
-                    localStorage.setItem('userHasVoted', 'true');
-
-                    // Визуально отключаем кнопку
-                    voteBtn.innerText = "Голос принят";
-                    voteBtn.disabled = true;
-
-                    alert("Ваш голос учтен!");
-                }
-            });
-        });
-    </script>
 
 </body>
 </html>
